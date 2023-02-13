@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from 'react';
+import {Route, Router, useSearchParams} from 'react-router-dom';
+import {getCurrentPage, getPerPage, getQueryParam, loadRepoList} from "./Store/repoSlice";
+import Header from "./component/header";
+import RepoList from "./component/RepoList";
+import Footer from "./component/Fotter";
 
 function App() {
+  const dispatch = useDispatch()
+  const currentPage = useSelector(getCurrentPage())
+  const perPage = useSelector(getPerPage())
+  const [searchParams, setSearchParams] = useSearchParams({ query: '' });
+  useEffect(() => {
+    const search = localStorage.getItem('search');
+    console.log(search,'const search = localStorage.getItem(\'search\');')
+    dispatch(loadRepoList('',currentPage,perPage))
+  }, [currentPage,perPage,])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  <div className="App">
+        <Header/>
+        <RepoList/>
+        <Footer/>
+  </div>
+  )
 }
 
 export default App;
